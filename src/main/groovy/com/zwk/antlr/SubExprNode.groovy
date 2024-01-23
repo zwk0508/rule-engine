@@ -7,7 +7,7 @@ class SubExprNode extends RightExprNode {
     def op
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitSubExprNode(this, c)
     }
 }

@@ -8,7 +8,7 @@ class SingleRuleNode implements Node {
     def assignExprs = []
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitSingleRuleNode(this,c)
     }
 }

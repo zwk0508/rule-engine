@@ -5,7 +5,7 @@ class MemberAccessNode implements Node {
     def ids = []
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitMemberAccessNode(this, c)
     }
 }

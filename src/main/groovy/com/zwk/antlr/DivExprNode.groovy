@@ -6,7 +6,7 @@ class DivExprNode extends RightExprNode {
     def op
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitDivExprNode(this, c)
     }
 }

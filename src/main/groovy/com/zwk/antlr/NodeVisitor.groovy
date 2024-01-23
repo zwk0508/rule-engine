@@ -3,7 +3,7 @@ package com.zwk.antlr
 class NodeVisitor<R, C> {
 
     R processNode(Node node, C c) {
-        node.accept(this, c)
+        (R)node.accept(this, c)
     }
 
     R visitRootNode(RootNode node, C c) {

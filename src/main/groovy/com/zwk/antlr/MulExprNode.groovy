@@ -6,7 +6,7 @@ class MulExprNode extends RightExprNode {
     def op
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitMulExprNode(this, c)
     }
 }

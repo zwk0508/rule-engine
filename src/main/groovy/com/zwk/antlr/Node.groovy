@@ -1,5 +1,5 @@
 package com.zwk.antlr
 
 interface Node {
-    void accept(v,c)
+    def accept(v,c)
 }

@@ -7,7 +7,7 @@ class CompExprNode implements Node {
     def value
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitCompExprNode(this, c)
     }
 }

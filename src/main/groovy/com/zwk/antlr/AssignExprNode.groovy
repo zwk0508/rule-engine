@@ -6,7 +6,7 @@ class AssignExprNode implements Node {
     def rightExpr
 
     @Override
-    void accept(Object v, Object c) {
+    def accept(Object v, Object c) {
         v.visitAssignExprNode(this, c)
     }
 }
