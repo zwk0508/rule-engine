@@ -73,7 +73,7 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
     @Override
     Node visitPriorityCompExpr(RuleBaseParser.PriorityCompExprContext ctx) {
         def node = new PriorityCompExprNode()
-        node.compExpr = visit(ctx.compExpr())
+        node.conditionExpr = visit(ctx.conditionExpr())
         return node
     }
 

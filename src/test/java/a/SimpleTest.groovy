@@ -13,21 +13,29 @@ class SimpleTest {
 
     static void main(String[] args) {
 
-        println('2024-01-24' > '2024-01-25')
-
         def engine = new RuleEngine()
-        engine.parseRule("rule('0-18'){ if (age < 18){zs.message = '未成年'  zs.age = 13}}\nrule('18-30'){if (age >= 18 and age < 30){zs.message = '青年'}}")
+        engine.parseRule("rule('age'){ if (age < 18){zs.message = '未成年'}}")
 
         def user = new User(age: 17)
-        def zs = new User()
+        def zs = new User(age: 0)
         def ctx = new RuleContext(root: user)
         ctx.put('zs', zs)
-
-
-        engine.applyRule('0-18', ctx)
+        engine.applyRule('age', ctx)
         println(zs)
-        user.age = 19
-        engine.applyRule('18-30', ctx)
-        println(zs)
+
+//        def user1 = new User(age: 19)
+//        engine.applyRule('age', [user, user1])
+//        println(user)
+//        println(user1)
+//        def zs = new User()
+//        def ctx = new RuleContext(root: user)
+//        ctx.put('zs', zs)
+//
+//
+//        engine.applyRule('0-18', ctx)
+//        println(zs)
+//        user.age = 19
+//        engine.applyRule('18-30', ctx)
+//        println(zs)
     }
 }

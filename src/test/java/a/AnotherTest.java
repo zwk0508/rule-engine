@@ -12,7 +12,7 @@ import com.zwk.RuleEngine;
 public class AnotherTest {
     public static void main(String[] args) throws Exception {
         RuleEngine engine = new RuleEngine();
-        engine.parseRule("rule('age'){ if (age < 18){zs.message = '未成年' zs.age = 13} if (age >= 18 and age < 30){zs.message = '青年'}}");
+        engine.parseRule("rule('age'){ if (age < 18){zs.message = '未成年' zs.age = age+13} if ((age >= 18 and age < 30) || (age >= 18 and age < 30)){zs.message = '青年' zs.age = zs.age+20}}");
 
         SimpleTest.User user = new SimpleTest.User();
         user.setAge(17);

@@ -57,7 +57,9 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
             def size = compExprs.size()
             for (i in 0..<size) {
                 if (i > 0) {
-                    builder.append(getOp(node.ops[i - 1]))
+                    builder.append(' ')
+                            .append(getOp(node.ops[i - 1]))
+                            .append(' ')
                 }
                 compExprs[i].accept(this, builder)
             }
@@ -89,7 +91,7 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
     @Override
     Void visitPriorityCompExprNode(PriorityCompExprNode node, StringBuilder builder) {
         builder.append('(')
-        node.compExpr.accept(this, builder)
+        node.conditionExpr.accept(this, builder)
         builder.append(')')
         return null
     }

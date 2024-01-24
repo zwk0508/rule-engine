@@ -1,7 +1,7 @@
 package com.zwk.antlr
 
 class PriorityCompExprNode extends CompExprNode {
-    def compExpr
+    def conditionExpr
 
     @Override
     def accept(Object v, Object c) {

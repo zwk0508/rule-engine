@@ -9,7 +9,7 @@ ifExpr          : IF '(' conditionExpr ')' '{' assignExpr* '}' ;
 conditionExpr   : compExpr (ops+=LOGIC_OP compExpr)* ;
 
 compExpr        : memberAccess op=COMP_OP literalValue  #baseCompExpr
-                | '(' compExpr ')'                      #priorityCompExpr
+                | '(' conditionExpr ')'                 #priorityCompExpr
                 ;
 
 literalValue    : CHAR_STRING                           #stringLiteralValue
