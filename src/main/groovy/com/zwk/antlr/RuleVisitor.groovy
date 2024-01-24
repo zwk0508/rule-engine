@@ -17,33 +17,85 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
     @Override
     Node visitSingleRule(RuleBaseParser.SingleRuleContext ctx) {
         SingleRuleNode singleRuleNode = new SingleRuleNode()
-        singleRuleNode.ruleName = ctx.SINGLE_QUOTE_STRING().text
-        def compExprs = ctx.compExpr()
-        if (compExprs) {
-            compExprs.eachWithIndex { def r, def i ->
-                singleRuleNode.compExprs << visit(r)
+        singleRuleNode.ruleName = ctx.CHAR_STRING().text
+        def ifExprs = ctx.ifExpr()
+        if (ifExprs) {
+            ifExprs.eachWithIndex { def r, def i ->
+                singleRuleNode.ifExprs << visit(r)
             }
-            singleRuleNode.ops.addAll(ctx.op.collect { it.text })
-        }
-        def assignExprs = ctx.assignExpr()
-        if (assignExprs) {
-            for (r in assignExprs) {
-                singleRuleNode.assignExprs << visit(r)
-            }
+
         }
         return singleRuleNode
     }
 
     @Override
-    Node visitCompExpr(RuleBaseParser.CompExprContext ctx) {
-        def exprNode = new CompExprNode()
-        exprNode.memberAccess = visit(ctx.memberAccess())
-        exprNode.op = ctx.op.text
-        exprNode.value = ctx.SINGLE_QUOTE_STRING()
-                ? ctx.SINGLE_QUOTE_STRING().text
-                : ctx.NUMBER().text
+    Node visitIfExpr(RuleBaseParser.IfExprContext ctx) {
+        def node = new IfExprNode()
+        node.conditionExpr = visit(ctx.conditionExpr())
+        def assignExprs = ctx.assignExpr()
+        if (assignExprs) {
+            for (expr in assignExprs) {
+                node.assignExprs << visit(expr)
+            }
+        }
+        return node
+    }
 
-        return exprNode
+    @Override
+    Node visitConditionExpr(RuleBaseParser.ConditionExprContext ctx) {
+        def node = new ConditionExprNode()
+
+        def compExprs = ctx.compExpr()
+        if (compExprs) {
+            for (expr in compExprs) {
+                node.compExprs << visit(expr)
+            }
+        }
+
+        def ops = ctx.ops
+        if (ops) {
+            node.ops.addAll(ops.collect { it.text })
+        }
+        return node
+    }
+
+    @Override
+    Node visitBaseCompExpr(RuleBaseParser.BaseCompExprContext ctx) {
+        def node = new BaseCompExprNode()
+
+        node.memberAccess = visit(ctx.memberAccess())
+        node.op = ctx.op.text
+        node.literalValue = visit(ctx.literalValue())
+
+        return node
+    }
+
+    @Override
+    Node visitPriorityCompExpr(RuleBaseParser.PriorityCompExprContext ctx) {
+        def node = new PriorityCompExprNode()
+        node.compExpr = visit(ctx.compExpr())
+        return node
+    }
+
+    @Override
+    Node visitStringLiteralValue(RuleBaseParser.StringLiteralValueContext ctx) {
+        def node = new StringLiteralValueNode()
+        node.value = ctx.CHAR_STRING().text
+        return node
+    }
+
+    @Override
+    Node visitNumberLiteralValue(RuleBaseParser.NumberLiteralValueContext ctx) {
+        def node = new NumberLiteralValueNode()
+        node.value = ctx.NUMBER().text
+        return node
+    }
+
+    @Override
+    Node visitBoolLiteralValue(RuleBaseParser.BoolLiteralValueContext ctx) {
+        def node = new BoolLiteralValueNode()
+        node.value = ctx.BOOL().text
+        return node
     }
 
     @Override
@@ -111,19 +163,10 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
     }
 
     @Override
-    Node visitStringExpr(RuleBaseParser.StringExprContext ctx) {
-
-        def exprNode = new StringExprNode()
-        exprNode.string = ctx.SINGLE_QUOTE_STRING().text
-
-        return exprNode
-    }
-
-    @Override
-    Node visitNumberExpr(RuleBaseParser.NumberExprContext ctx) {
-        def exprNode = new NumberExprNode()
-        exprNode.number = ctx.NUMBER().text
-        return exprNode
+    Node visitLiteralValueExpr(RuleBaseParser.LiteralValueExprContext ctx) {
+        def node = new LiteralValueExprNode()
+        node.literalValue = visit(ctx.literalValue())
+        return node
     }
 }
 

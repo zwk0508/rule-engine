@@ -1,86 +1,103 @@
 grammar RuleBase;
 
-root: singleRule* EOF;
+root            : singleRule+ EOF ;
 
-singleRule: RULE '(' SINGLE_QUOTE_STRING ')' '{' IF '(' compExpr (op+=LOGIC_OP compExpr)* ')' '{' assignExpr* '}' '}';
+singleRule      : RULE '(' CHAR_STRING ')' '{' ifExpr* '}' ;
 
-compExpr: memberAccess op=COMP_OP (SINGLE_QUOTE_STRING | NUMBER) ;
-assignExpr: memberAccess '=' rightExpr ;
+ifExpr          : IF '(' conditionExpr ')' '{' assignExpr* '}' ;
 
+conditionExpr   : compExpr (ops+=LOGIC_OP compExpr)* ;
 
-rightExpr:    rightExpr op='*' rightExpr    #mulExpr
-            | rightExpr op='/' rightExpr    #divExpr
-            | rightExpr op='+' rightExpr    #plusExpr
-            | rightExpr op='-' rightExpr    #subExpr
-            | memberAccess                  #idExpr
-            | SINGLE_QUOTE_STRING           #stringExpr
-            | NUMBER                        #numberExpr
-            ;
+compExpr        : memberAccess op=COMP_OP literalValue  #baseCompExpr
+                | '(' compExpr ')'                      #priorityCompExpr
+                ;
 
-memberAccess: IDENTIFIER ('.' IDENTIFIER)*;
+literalValue    : CHAR_STRING                           #stringLiteralValue
+                | NUMBER                                #numberLiteralValue
+                | BOOL                                  #boolLiteralValue
+                ;
 
-IF         : 'IF';
-RULE       : 'RULE';
+assignExpr      : memberAccess '=' rightExpr ;
 
 
-COMP_OP: GT | GE | LT | LE | EQUAL | NOTEQUAL;
-LOGIC_OP: AND | OR | AND_WORD | OR_WORD;
+rightExpr       : rightExpr op='*' rightExpr            #mulExpr
+                | rightExpr op='/' rightExpr            #divExpr
+                | rightExpr op='+' rightExpr            #plusExpr
+                | rightExpr op='-' rightExpr            #subExpr
+                | memberAccess                          #idExpr
+                | literalValue                          #literalValueExpr
+                ;
 
-AND_WORD   : 'AND';
-OR_WORD    : 'OR';
+memberAccess    : IDENTIFIER ('.' IDENTIFIER)* ;
 
-SINGLE_QUOTE_STRING: '\'' ( EscapeSequence | ~('\'' | '\\'))* '\'';
+IF              : 'IF';
+RULE            : 'RULE';
+BOOL            : 'true' | 'false' ;
 
-IDENTIFIER: ID_START (DIGIT | LETTER | DOLLAR | UNDERLINE)*;
 
-ID_START: LETTER | DOLLAR | UNDERLINE;
+COMP_OP         : GT | GE | LT | LE | EQUAL | NOTEQUAL ;
+LOGIC_OP        : AND | OR | AND_WORD | OR_WORD ;
 
-ASSIGN     : '=';
-GT         : '>';
-GE         : '>=';
-LT         : '<';
-LE         : '<=';
-EQUAL      : '==';
-NOTEQUAL   : '!=';
-AND        : '&&';
-OR         : '||';
+AND_WORD        : 'AND' ;
+OR_WORD         : 'OR' ;
 
-ADD        : '+';
-SUB        : '-';
-MUL        : '*';
-DIV        : '/';
-DOLLAR     : '$';
-UNDERLINE  : '_';
+CHAR_STRING     : '\'' ( EscapeSequence | ~('\'' | '\\'))* '\'' ;
 
-LPAREN : '(';
-RPAREN : ')';
-LBRACE : '{';
-RBRACE : '}';
-DOT    : '.';
+IDENTIFIER      : ID_START (DIGIT | LETTER | DOLLAR | UNDERLINE)* ;
 
-NUMBER: DIGIT+ ('.' DIGIT+)?;
+ID_START        : LETTER | DOLLAR | UNDERLINE ;
 
-fragment DIGIT:  [0-9];
+ASSIGN          : '=' ;
+GT              : '>' ;
+GE              : '>=' ;
+LT              : '<' ;
+LE              : '<=' ;
+EQUAL           : '==' ;
+NOTEQUAL        : '!=' ;
+AND             : '&&' ;
+OR              : '||' ;
+ADD             : '+' ;
+SUB             : '-' ;
+MUL             : '*' ;
+DIV             : '/' ;
+DOLLAR          : '$' ;
+UNDERLINE       : '_' ;
 
-fragment LETTER: [A-Z];
+LPAREN          : '(' ;
+RPAREN          : ')' ;
+LBRACE          : '{' ;
+RBRACE          : '}' ;
+DOT             : '.' ;
 
-fragment EscapeSequence:
-    '\\' [abfnrtvz"'|$#\\]
-    | '\\' '\r'? '\n'
-    | DecimalEscape
-    | HexEscape
-    | UtfEscape
-;
-fragment DecimalEscape: '\\' DIGIT | '\\' DIGIT DIGIT | '\\' [0-2] DIGIT DIGIT;
+NUMBER          : DIGIT+ ('.' DIGIT+)? ;
 
-fragment HexEscape: '\\' 'x' HexDigit HexDigit;
+fragment
+DIGIT           : [0-9] ;
 
-fragment UtfEscape: '\\' 'u{' HexDigit+ '}';
+fragment
+LETTER          : [A-Z] ;
 
-fragment HexDigit: [0-9a-fA-F];
+fragment
+EscapeSequence  : '\\' [abfnrtvz"'|$#\\]
+                | '\\' '\r'? '\n'
+                | DecimalEscape
+                | HexEscape
+                | UtfEscape
+                ;
+fragment
+DecimalEscape   : '\\' DIGIT | '\\' DIGIT DIGIT | '\\' [0-2] DIGIT DIGIT ;
 
-WS: [ \t\r\n\u000C]+ -> skip;
+fragment
+HexEscape       : '\\' 'x' HexDigit HexDigit ;
 
-COMMENT: '/*' .*? '*/' -> skip;
+fragment
+UtfEscape       : '\\' 'u{' HexDigit+ '}' ;
 
-LINE_COMMENT: '//' ~[\r\n]* -> skip;
+fragment
+HexDigit        : [0-9a-fA-F] ;
+
+WS              : [ \t\r\n\u000C]+ -> skip ;
+
+COMMENT         : '/*' .*? '*/' -> skip ;
+
+LINE_COMMENT    : '//' ~[\r\n]* -> skip ;

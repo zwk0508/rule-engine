@@ -13,6 +13,8 @@ class SimpleTest {
 
     static void main(String[] args) {
 
+        println('2024-01-24' > '2024-01-25')
+
         def engine = new RuleEngine()
         engine.parseRule("rule('0-18'){ if (age < 18){zs.message = '未成年'  zs.age = 13}}\nrule('18-30'){if (age >= 18 and age < 30){zs.message = '青年'}}")
 

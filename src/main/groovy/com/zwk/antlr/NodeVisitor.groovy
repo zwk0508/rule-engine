@@ -3,7 +3,7 @@ package com.zwk.antlr
 class NodeVisitor<R, C> {
 
     R processNode(Node node, C c) {
-        (R)node.accept(this, c)
+        (R) node.accept(this, c)
     }
 
     R visitRootNode(RootNode node, C c) {
@@ -14,10 +14,21 @@ class NodeVisitor<R, C> {
         visitNode(node, c)
     }
 
-    R visitCompExprNode(CompExprNode node, C c) {
+    R visitIfExprNode(IfExprNode node, C c) {
         visitNode(node, c)
     }
 
+    R visitConditionExprNode(ConditionExprNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitBaseCompExprNode(BaseCompExprNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitPriorityCompExprNode(PriorityCompExprNode node, C c) {
+        visitNode(node, c)
+    }
 
     R visitAssignExprNode(AssignExprNode node, C c) {
         visitNode(node, c)
@@ -47,11 +58,19 @@ class NodeVisitor<R, C> {
         visitNode(node, c)
     }
 
-    R visitStringExprNode(StringExprNode node, C c) {
+    R visitLiteralValueExprNode(LiteralValueExprNode node, C c) {
         visitNode(node, c)
     }
 
-    R visitNumberExprNode(NumberExprNode node, C c) {
+    R visitStringLiteralValueNode(StringLiteralValueNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitNumberLiteralValueNode(NumberLiteralValueNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitBoolLiteralValueNode(BoolLiteralValueNode node, C c) {
         visitNode(node, c)
     }
 

@@ -17,26 +17,51 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
         builder.append('rule(')
                 .append(node.ruleName)
                 .append('){')
-                .append('if(')
-        def size = node.compExprs.size()
-        for (i in 0..<size) {
-            if (i > 0) {
-                builder.append(' ')
-                        .append(getOp(node.ops[i - 1]))
-                        .append(' ')
-            }
-            node.compExprs[i].accept(this, builder)
-        }
-        builder.append('){')
 
-        size = node.assignExprs.size()
-        for (i in 0..<size) {
-            if (i > 0) {
-                builder.append('\n')
+        def ifExprs = node.ifExprs
+        if (ifExprs) {
+            for (expr in ifExprs) {
+                expr.accept(this, builder)
             }
-            node.assignExprs[i].accept(this, builder)
         }
-        builder.append('}}')
+        builder.append('}')
+        return null
+    }
+
+    @Override
+    Void visitIfExprNode(IfExprNode node, StringBuilder builder) {
+
+        builder.append('if(')
+        node.conditionExpr.accept(this, builder)
+        builder.append('){')
+        def assignExprs = node.assignExprs
+        if (assignExprs) {
+            def size = assignExprs.size()
+            for (i in 0..<size) {
+                if (i > 0) {
+                    builder.append('\n')
+                }
+                assignExprs[i].accept(this, builder)
+            }
+        }
+
+        builder.append('}\n')
+
+        return null
+    }
+
+    @Override
+    Void visitConditionExprNode(ConditionExprNode node, StringBuilder builder) {
+        def compExprs = node.compExprs
+        if (compExprs) {
+            def size = compExprs.size()
+            for (i in 0..<size) {
+                if (i > 0) {
+                    builder.append(getOp(node.ops[i - 1]))
+                }
+                compExprs[i].accept(this, builder)
+            }
+        }
         return null
     }
 
@@ -51,10 +76,21 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
     }
 
     @Override
-    Void visitCompExprNode(CompExprNode node, StringBuilder builder) {
+    Void visitBaseCompExprNode(BaseCompExprNode node, StringBuilder builder) {
         node.memberAccess.accept(this, builder)
-        builder.append(node.op)
-                .append(node.value)
+        builder.append(' ')
+                .append(node.op)
+                .append(' ')
+        node.literalValue.accept(this, builder)
+
+        return null
+    }
+
+    @Override
+    Void visitPriorityCompExprNode(PriorityCompExprNode node, StringBuilder builder) {
+        builder.append('(')
+        node.compExpr.accept(this, builder)
+        builder.append(')')
         return null
     }
 
@@ -121,15 +157,28 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
         return null
     }
 
+
     @Override
-    Void visitStringExprNode(StringExprNode node, StringBuilder builder) {
-        builder.append(node.string)
+    Void visitLiteralValueExprNode(LiteralValueExprNode node, StringBuilder builder) {
+        node.literalValue.accept(this, builder)
         return null
     }
 
     @Override
-    Void visitNumberExprNode(NumberExprNode node, StringBuilder builder) {
-        builder.append(node.number)
+    Void visitStringLiteralValueNode(StringLiteralValueNode node, StringBuilder builder) {
+        builder.append(node.value)
+        return null
+    }
+
+    @Override
+    Void visitNumberLiteralValueNode(NumberLiteralValueNode node, StringBuilder builder) {
+        builder.append(node.value)
+        return null
+    }
+
+    @Override
+    Void visitBoolLiteralValueNode(BoolLiteralValueNode node, StringBuilder builder) {
+        builder.append(node.value)
         return null
     }
 }
