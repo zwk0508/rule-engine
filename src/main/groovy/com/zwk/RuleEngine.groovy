@@ -29,12 +29,28 @@ class RuleEngine {
         Objects.requireNonNull(ruleName, 'rule name cannot be null')
         Objects.requireNonNull(obj, 'rule obj cannot be null')
         def rule = rc.getRule(ruleName)
-        if (!(obj instanceof RuleContext)) {
-            def ctx = new RuleContext()
-            ctx.setRoot(obj)
-            obj = ctx
+        if (isIterable(obj)) {
+            for (o in obj) {
+                rule(getRuleContext(o))
+            }
+        } else {
+            rule(getRuleContext(obj))
         }
-        rule(obj)
+    }
+
+    def getRuleContext(obj) {
+        if (obj instanceof RuleContext) {
+            return obj
+        }
+
+        def ctx = new RuleContext()
+        ctx.setRoot(obj)
+        ctx
+    }
+
+    def isIterable(obj) {
+        def clazz = obj.getClass()
+        clazz.isArray() || Iterable.isAssignableFrom(clazz)
     }
 
     def hasRule(String ruleName) {
