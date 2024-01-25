@@ -10,7 +10,7 @@ class BaseCompExprNode extends CompExprNode {
 
     def memberAccess
     def op
-    def literalValue
+    def rightExpr
 
     @Override
     Object accept(Object v, Object c) {

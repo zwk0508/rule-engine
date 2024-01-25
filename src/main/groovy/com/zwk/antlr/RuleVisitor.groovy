@@ -65,7 +65,7 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
 
         node.memberAccess = visit(ctx.memberAccess())
         node.op = ctx.op.text
-        node.literalValue = visit(ctx.literalValue())
+        node.rightExpr = visit(ctx.rightExpr())
 
         return node
     }
@@ -95,6 +95,13 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
     Node visitBoolLiteralValue(RuleBaseParser.BoolLiteralValueContext ctx) {
         def node = new BoolLiteralValueNode()
         node.value = ctx.BOOL().text
+        return node
+    }
+
+    @Override
+    Node visitNullLiteralValue(RuleBaseParser.NullLiteralValueContext ctx) {
+        def node = new NullLiteralValueNode()
+        node.value = ctx.NULL().text
         return node
     }
 
@@ -168,5 +175,14 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
         node.literalValue = visit(ctx.literalValue())
         return node
     }
+
+
+    @Override
+    Node visitPriorityRightExpr(RuleBaseParser.PriorityRightExprContext ctx) {
+        def node = new PriorityRightExprNode()
+        node.rightExpr = visit(ctx.rightExpr())
+        return node
+    }
+
 }
 

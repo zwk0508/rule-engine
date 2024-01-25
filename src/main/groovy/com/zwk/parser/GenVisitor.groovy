@@ -83,7 +83,7 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
         builder.append(' ')
                 .append(node.op)
                 .append(' ')
-        node.literalValue.accept(this, builder)
+        node.rightExpr.accept(this, builder)
 
         return null
     }
@@ -167,6 +167,14 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
     }
 
     @Override
+    Void visitPriorityRightExprNode(PriorityRightExprNode node, StringBuilder builder) {
+        builder.append('(')
+        node.rightExpr.accept(this, builder)
+        builder.append(')')
+        return null
+    }
+
+    @Override
     Void visitStringLiteralValueNode(StringLiteralValueNode node, StringBuilder builder) {
         builder.append(node.value)
         return null
@@ -180,6 +188,12 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
 
     @Override
     Void visitBoolLiteralValueNode(BoolLiteralValueNode node, StringBuilder builder) {
+        builder.append(node.value)
+        return null
+    }
+
+    @Override
+    Void visitNullLiteralValueNode(NullLiteralValueNode node, StringBuilder builder) {
         builder.append(node.value)
         return null
     }

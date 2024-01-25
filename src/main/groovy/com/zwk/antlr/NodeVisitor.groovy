@@ -62,6 +62,10 @@ class NodeVisitor<R, C> {
         visitNode(node, c)
     }
 
+    R visitPriorityRightExprNode(PriorityRightExprNode node, C c) {
+        visitNode(node, c)
+    }
+
     R visitStringLiteralValueNode(StringLiteralValueNode node, C c) {
         visitNode(node, c)
     }
@@ -71,6 +75,10 @@ class NodeVisitor<R, C> {
     }
 
     R visitBoolLiteralValueNode(BoolLiteralValueNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitNullLiteralValueNode(NullLiteralValueNode node, C c) {
         visitNode(node, c)
     }
 

@@ -8,13 +8,8 @@ ifExpr          : IF '(' conditionExpr ')' '{' assignExpr* '}' ;
 
 conditionExpr   : compExpr (ops+=LOGIC_OP compExpr)* ;
 
-compExpr        : memberAccess op=COMP_OP literalValue  #baseCompExpr
+compExpr        : memberAccess op=COMP_OP rightExpr     #baseCompExpr
                 | '(' conditionExpr ')'                 #priorityCompExpr
-                ;
-
-literalValue    : CHAR_STRING                           #stringLiteralValue
-                | NUMBER                                #numberLiteralValue
-                | BOOL                                  #boolLiteralValue
                 ;
 
 assignExpr      : memberAccess '=' rightExpr ;
@@ -24,16 +19,23 @@ rightExpr       : rightExpr op='*' rightExpr            #mulExpr
                 | rightExpr op='/' rightExpr            #divExpr
                 | rightExpr op='+' rightExpr            #plusExpr
                 | rightExpr op='-' rightExpr            #subExpr
-                | memberAccess                          #idExpr
+                | '(' rightExpr ')'                     #priorityRightExpr
                 | literalValue                          #literalValueExpr
+                | memberAccess                          #idExpr
                 ;
 
 memberAccess    : IDENTIFIER ('.' IDENTIFIER)* ;
 
+literalValue    : CHAR_STRING                           #stringLiteralValue
+                | NUMBER                                #numberLiteralValue
+                | BOOL                                  #boolLiteralValue
+                | NULL                                  #nullLiteralValue
+                ;
+
 IF              : 'IF';
 RULE            : 'RULE';
-BOOL            : 'true' | 'false' ;
-
+BOOL            : 'TRUE' | 'FALSE' ;
+NULL            : 'NULL' ;
 
 COMP_OP         : GT | GE | LT | LE | EQUAL | NOTEQUAL ;
 LOGIC_OP        : AND | OR | AND_WORD | OR_WORD ;
