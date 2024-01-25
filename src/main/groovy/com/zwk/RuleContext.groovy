@@ -8,11 +8,11 @@ class RuleContext {
     def functions = [:]
 
 
-    void put(String key, obj) {
+    void addVariable(String key, obj) {
         bindings[key] = obj
     }
 
-    void putAll(Map map) {
+    void addVariables(Map map) {
         bindings.putAll(map)
     }
 

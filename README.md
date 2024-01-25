@@ -91,7 +91,7 @@ def user = new User(age: 17)
 def zs = new User(age: 0)
 def ctx = new RuleContext(root: user)
 //添加额外变量
-ctx.put('zs', zs)
+ctx.addVariable('zs', zs)
 engine.applyRule('age', ctx)
 println(zs)  //-----User(0, 未成年)
 ```

@@ -20,7 +20,7 @@ public class AnotherTest {
         zs.setAge(9);
         RuleContext ctx = new RuleContext();
         ctx.setRoot(user);
-        ctx.put("zs", zs);
+        ctx.addVariable("zs", zs);
         ctx.registerFunction("getAge", user);
 
 
