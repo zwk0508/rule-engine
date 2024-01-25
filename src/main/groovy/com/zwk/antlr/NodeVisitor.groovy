@@ -82,6 +82,22 @@ class NodeVisitor<R, C> {
         visitNode(node, c)
     }
 
+    R visitFuncCallExprNode(FuncCallExprNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitFuncCallNode(FuncCallNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitFuncParamsNode(FuncParamsNode node, C c) {
+        visitNode(node, c)
+    }
+
+    R visitFuncParamNode(FuncParamNode node, C c) {
+        visitNode(node, c)
+    }
+
     R visitNode(Node node, C c) {
         null
     }

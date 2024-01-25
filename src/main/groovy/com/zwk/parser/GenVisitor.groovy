@@ -197,4 +197,46 @@ class GenVisitor extends NodeVisitor<Void, StringBuilder> {
         builder.append(node.value)
         return null
     }
+
+    @Override
+    Void visitFuncCallExprNode(FuncCallExprNode node, StringBuilder builder) {
+        node.funCall.accept(this, builder)
+        return null
+    }
+
+    @Override
+    Void visitFuncCallNode(FuncCallNode node, StringBuilder builder) {
+        builder.append('it.callFunction(\'')
+                .append(node.funcName)
+                .append('\'')
+        def params = node.funcParams
+        if (params) {
+            builder.append(',')
+            params.accept(this, builder)
+        }
+
+        builder.append(')')
+        return null
+    }
+
+    @Override
+    Void visitFuncParamsNode(FuncParamsNode node, StringBuilder builder) {
+
+        def params = node.funcParam
+        def size = params.size()
+        for (i in 0..<size) {
+            if (i > 0) {
+                builder.append(',')
+            }
+            params[i].accept(this, builder)
+        }
+
+        return null
+    }
+
+    @Override
+    Void visitFuncParamNode(FuncParamNode node, StringBuilder builder) {
+        node.rightExpr.accept(this, builder)
+        return null
+    }
 }

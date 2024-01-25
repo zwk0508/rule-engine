@@ -184,5 +184,43 @@ class RuleVisitor extends RuleBaseBaseVisitor<Node> {
         return node
     }
 
+    @Override
+    Node visitFuncCallExpr(RuleBaseParser.FuncCallExprContext ctx) {
+        def node = new FuncCallExprNode()
+        node.funCall = visit(ctx.funcCall())
+        return node
+    }
+
+    @Override
+    Node visitFuncCall(RuleBaseParser.FuncCallContext ctx) {
+        def node = new FuncCallNode()
+        node.funcName = ctx.IDENTIFIER().text
+        def params = ctx.funcParams()
+
+        if (params) {
+            node.funcParams = visit(params)
+        }
+        return node
+    }
+
+    @Override
+    Node visitFuncParams(RuleBaseParser.FuncParamsContext ctx) {
+        def node = new FuncParamsNode()
+
+        def params = ctx.funcParam()
+        if (params) {
+            for (p in params) {
+                node.funcParam << visit(p)
+            }
+        }
+        return node
+    }
+
+    @Override
+    Node visitFuncParam(RuleBaseParser.FuncParamContext ctx) {
+        def node = new FuncParamNode()
+        node.rightExpr = visit(ctx.rightExpr())
+        return node
+    }
 }
 

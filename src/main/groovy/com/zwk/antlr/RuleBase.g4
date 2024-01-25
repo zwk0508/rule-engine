@@ -22,6 +22,14 @@ rightExpr       : rightExpr op='*' rightExpr            #mulExpr
                 | '(' rightExpr ')'                     #priorityRightExpr
                 | literalValue                          #literalValueExpr
                 | memberAccess                          #idExpr
+                | funcCall                              #funcCallExpr
+                ;
+
+funcCall        : IDENTIFIER '(' funcParams? ')' ;
+
+funcParams      : funcParam (',' funcParam)* ;
+
+funcParam       : rightExpr
                 ;
 
 memberAccess    : IDENTIFIER ('.' IDENTIFIER)* ;

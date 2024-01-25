@@ -23,9 +23,10 @@
  *      布尔值         true, false
  *      空值           null
  *      计算值         3 * 4, field + value, field - value, field * value, field / value
+ *      函数           pow(3,2),toUpperCase('zs'),isTeenager(zs.age)..
  *      例如：
  *           age = 2 * (3 + 3)
- *           age = age + 18
+ *           age = age + pow(3,2)
  *           age = zs.age + 3
  *           female = true
  *           zs.message = '未成年'
@@ -93,4 +94,23 @@ def ctx = new RuleContext(root: user)
 ctx.put('zs', zs)
 engine.applyRule('age', ctx)
 println(zs)  //-----User(0, 未成年)
+```
+
+###### 注册函数
+
+```groovy
+import com.zwk.RuleEngine
+
+def engine = new RuleEngine()
+engine.parseRule("rule('age'){ if (age >= pow(10,2)){message = '长寿' age = getAge() + 1}}")
+
+def user = new User(age: 100)
+def ctx = new RuleContext(root: user)
+//注册静态
+ctx.registerFunction('pow', Math)
+//注册实例
+ctx.registerFunction('getAge', user)
+
+engine.applyRule('age', ctx)
+println(user)  //-----User(101, 长寿)
 ```

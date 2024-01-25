@@ -14,14 +14,17 @@ class SimpleTest {
     static void main(String[] args) {
 
         def engine = new RuleEngine()
-        engine.parseRule("rule('age'){ if (age < 18){zs.message = '未成年'}}")
+        engine.parseRule("rule('age'){ if (age >= pow(10,2)){message = '长寿' age = getAge() + 1}}")
 
-        def user = new User(age: 17)
-        def zs = new User(age: 0)
+        def user = new User(age: 100)
         def ctx = new RuleContext(root: user)
-        ctx.put('zs', zs)
+        //注册静态
+        ctx.registerFunction('pow', Math)
+        //注册实例
+        ctx.registerFunction('getAge', user)
+
         engine.applyRule('age', ctx)
-        println(zs)
+        println(user)
 
 //        def user1 = new User(age: 19)
 //        engine.applyRule('age', [user, user1])
