@@ -45,7 +45,7 @@ class RuleContext {
             if (thiz.functions.containsKey(k)) {
                 throw new IllegalArgumentException("function ${k} already exists!")
             }
-            thiz[k] = v
+            thiz.functions[k] = v
         }
     }
 
