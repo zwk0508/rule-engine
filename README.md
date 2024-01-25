@@ -10,28 +10,21 @@
  * rule 规则可以写多个 rule('a'){}  rule('b'){} ...
  * ruleName 单引号包裹的字符串 例如：'this is a rule name'
  * if 判断可以写多个 if(age > 18){} if(age > 20){} ...
- * condition 判断条件
- *      比较操作符：  >,>=,<,<=,==,!= 分别对应 大于，大于等于，小于，小于等于，等于，不等于
- *      逻辑操作符： &&,||,and,or 分别对应 逻辑与，逻辑或，逻辑与，逻辑或
- *      括号内优先级最高
- *      例如：age > 18
- *           age >= 18
- *           age < 18
- *           age <= 18
- *           age == 18
- *           age != 18
- *           age >= 18 && age <20
- *           age >= 18 || message == '已成年'
- *           (age < 18 && message == '未成年') || (age >= 65 && message == '已退休')
+ * condition 判断条件 格式：field op value logic_op field op value ...
+ *      op 比较操作符：  >,>=,<,<=,==,!= 分别对应 大于，大于等于，小于，小于等于，等于，不等于
+ *      logic_op 逻辑操作符： &&,||,and,or 分别对应 逻辑与，逻辑或，逻辑与，逻辑或
+ *      使用括号内来调整优先级
  * 赋值操作 field = value
+ * 
  * field 是对象的属性字段
- * value 值的形式以下几种
+ * value 值的形式以下几种 可以使用括号内来调整优先级
  *      字符串         'this is value string'
  *      整数和浮点数    1, 1.1
  *      布尔值         true, false
+ *      空值           null
  *      计算值         3 * 4, field + value, field - value, field * value, field / value
  *      例如：
- *           age = 2 * 9
+ *           age = 2 * (3 + 3)
  *           age = age + 18
  *           age = zs.age + 3
  *           female = true
